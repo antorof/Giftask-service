@@ -93,11 +93,13 @@ router.post('/addUsuario', function(req, res) {
 router.get('/usuarios', function(req, res) {
 	var db = req.db;
 	var collection = db.get('usercollection');
+	console.log(collection);
 	collection.find({},{},function(e,docs){
-        console.log(e);
-		res.render('usuarios', {
-			"usuarios" : docs
-		});
+        console.log(docs);
+		//res.render('usuarios', {
+		//	"usuarios" : docs
+		//});
+		res.json(docs);
 	});
 });
 
