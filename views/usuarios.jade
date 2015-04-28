@@ -1,0 +1,22 @@
+//Created by Georgevik on 23/04/15.
+extends layout
+block header
+	li
+		a(href="registro") Registro
+	li.active
+		a(href="#") Usuarios
+
+block content
+	div.container(ng-controller="consultaUsuario", ng-init="usuarios= #{JSON.stringify(usuarios)}")
+		h2 Consultar usuarios
+
+		table.table(ng-table="tableParams")
+			tr(ng-repeat="user in usuarios")
+				td.col-md-3.text-center(data-title="'Usuario'") {{user.usuario}}
+				td.col-md-3.text-center(data-title="'Email'") {{user.email}}
+				td.col-md-3.text-center(data-title="'Password'") {{user.password}}
+				td.col-md-3.text-center
+					input(id="editRowBtn{{user.id}}" type="button", value="Editar", ng-click="modalEditor(user)" )
+
+
+

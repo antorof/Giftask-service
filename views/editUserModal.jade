@@ -1,0 +1,20 @@
+// Created by Georgevik on 24/04/2015.
+
+div.modal-header
+	button.close(type="button", ng-click="cancel()", data-dismiss="modal", aria-hidden="true") &times;
+	h3 Editar usuario {{usuarioEditar._id}}
+
+div.modal-body
+	div.form-group
+		label Usuario
+		input#inputUsuario.form-control(type="text", name="usuario", placeholder="Usuario", required, ng-model="usuarioEditar.usuario")
+
+	div.form-group
+		label(for="inputEmail") Email
+		input#inputEmail.form-control(type="email", name="email", placeholder="Email", required, ng-model="usuarioEditar.email" )
+
+	div.form-group
+		label(for="inputPassword") Password
+		input#inputPassword.form-control(type="password",name="password", placeholder="Password", required, ng-model="usuarioEditar.password" )
+
+	button.btn.btn-primary(type="submit", ng-click="editarUsuario()") Editar
