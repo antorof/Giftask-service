@@ -5,6 +5,9 @@
  * Referencias sobre el uso de los metodos:
  * http://restcookbook.com/HTTP%20Methods/put-vs-post/
  *
+ * Recursos utiles:
+ * http://stackoverflow.com/questions/18902293/nodejs-validating-request-type-checking-for-json-or-html
+ *
  */
 var express = require('express');
 var router = express.Router();
@@ -123,6 +126,27 @@ router.put('/:id', function(req, res) {
       function(e,docs){
         console.log(docs);
         res.json({error:0,response:docs});
+    });
+  else
+    res.json({error:1,message:"Incorrect param"});
+});
+
+
+
+/**
+ * Elimina el usuario identificado por el <tt>id</tt>
+ */
+router.delete('/:id', function(req, res) {
+  var db = req.db;
+  var collection = db.get('usercollection');
+  var id = req.params.id;
+
+  console.log("DELETE Body:");
+  console.log(req.query);
+  if(id.length==24)
+    collection.removeById(id,{},function(e,docs){
+      console.log(docs);
+      res.json({error:0,response:docs});
     });
   else
     res.json({error:1,message:"Incorrect param"});
