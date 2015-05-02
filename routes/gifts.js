@@ -80,18 +80,18 @@ router.post('/', function(req, res) {
   console.log(req.body);
   console.log(req.query);
 
-  var token = req.query.token;
+  var token = req.query.token==undefined? req.body.token : req.query.token;
   var title = req.body.title;
   var image = req.body.image;
   var price = req.body.price;
-  var iHaveIt = req.body.iHaveIt;
+  var iHaveIt = undefined;
   var owner = token;
-  var userReserved = req.body.userReserved;
+  var userReserved = undefined;
   var shop = req.body.shop;
   var shopName = req.body.shopName;
   var insertionDate = req.body.insertionDate;
   var originId = req.body.originId;
-  var likes = req.body.likes;
+  var likes = undefined; // ToDo Se heredan los likes?
 
   // ToDo Validate token
   // ToDo Validate params
@@ -134,7 +134,7 @@ router.put('/:id', function(req, res) {
   console.log(req.body);
   console.log(req.query);
 
-  var token = req.query.token;
+  var token = req.query.token==undefined? req.body.token : req.query.token;
   var id = req.params.id;
   var title = req.body.title;
   var image = req.body.image;
