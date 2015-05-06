@@ -92,13 +92,17 @@ router.post('/', function(req, res) {
   console.log(req.body);
   console.log(req.query);
 
-  var username = req.body.username;
   var email    = req.body.email;
+  var username = req.body.username;
   var name     = req.body.name;
   var password = req.body.password;
+  var isMale   = req.body.isMale;
+  var town     = req.body.town;
   var birthday = req.body.birthday;
   var image    = req.body.image;
-  var isMale   = req.body.isMale;
+  var gifts    = req.body.gifts;
+  var followers= req.body.followers;
+  var following= req.body.following;
 
   // ToDo Validate params
   var required = [username,password,email];
@@ -108,13 +112,17 @@ router.post('/', function(req, res) {
   else
     collection.insert(
       {
-        username: username,
         email: email,
+        username: username,
         name: name,
         password: password,
+        isMale: isMale,
+        town: town,
         birthday: birthday,
         image: image,
-        isMale: isMale
+        gifts: gifts,
+        followers:followers,
+        following:following
       },
       function (err, doc) {
         if (err) {
@@ -145,13 +153,17 @@ router.put('/:id', function(req, res) {
   console.log(req.body);
   console.log(req.query);
 
-  var username = req.body.username;
   var email    = req.body.email;
+  var username = req.body.username;
   var name     = req.body.name;
   var password = req.body.password;
+  var isMale   = req.body.isMale;
+  var town     = req.body.town;
   var birthday = req.body.birthday;
   var image    = req.body.image;
-  var isMale   = req.body.isMale;
+  var gifts    = req.body.gifts;
+  var followers= req.body.followers;
+  var following= req.body.following;
 
   // ToDo Validate params
 
@@ -159,13 +171,17 @@ router.put('/:id', function(req, res) {
     collection.update(
       {"_id" : id},
       {
-        username: username,
         email: email,
+        username: username,
         name: name,
         password: password,
+        isMale: isMale,
+        town: town,
         birthday: birthday,
         image: image,
-        isMale: isMale
+        gifts: gifts,
+        followers:followers,
+        following:following
       },
       function(e,docs){
         console.log(docs);
