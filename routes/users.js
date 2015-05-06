@@ -94,10 +94,11 @@ router.post('/', function(req, res) {
 
   var username = req.body.username;
   var email    = req.body.email;
+  var name     = req.body.name;
   var password = req.body.password;
-  var sex      = req.body.sex;
   var birthday = req.body.birthday;
   var image    = req.body.image;
+  var isMale   = req.body.isMale;
 
   // ToDo Validate params
   var required = [username,password,email];
@@ -109,10 +110,11 @@ router.post('/', function(req, res) {
       {
         username: username,
         email: email,
+        name: name,
         password: password,
-        sex: sex,
         birthday: birthday,
-        image: image
+        image: image,
+        isMale: isMale
       },
       function (err, doc) {
         if (err) {
@@ -145,10 +147,11 @@ router.put('/:id', function(req, res) {
 
   var username = req.body.username;
   var email    = req.body.email;
+  var name     = req.body.name;
   var password = req.body.password;
-  var sex      = req.body.sex;
   var birthday = req.body.birthday;
   var image    = req.body.image;
+  var isMale   = req.body.isMale;
 
   // ToDo Validate params
 
@@ -158,10 +161,11 @@ router.put('/:id', function(req, res) {
       {
         username: username,
         email: email,
+        name: name,
         password: password,
-        sex: sex,
         birthday: birthday,
-        image: image
+        image: image,
+        isMale: isMale
       },
       function(e,docs){
         console.log(docs);
