@@ -20,30 +20,6 @@ var router = express.Router();
 /**
  * Devuelve todos los usuarios
  */
-router.get('/login', function(req, res, next) {
-  var db = req.db;
-  var collection = db.get('usercollection');
-
-  var auth = req.get('Authorization');
-  // ToDo validate auth
-  var username = auth.split(":")[0];
-  var password = auth.split(":")[1];
-
-  console.log(collection);
-  collection.find({username:username,password:password},{},function(e,docs){
-    console.log(docs);
-    if (e)
-      res.json({error:-2,message:"Internal error"});
-    else if(docs.length>0)
-      res.json({error:0,response:docs});
-    else
-      res.json({error:1,message:"Incorrect login",response:docs});
-  });
-});
-
-/**
- * Devuelve todos los usuarios
- */
 router.get('/', function(req, res, next) {
   var db = req.db;
   var collection = db.get('usercollection');
@@ -55,7 +31,7 @@ router.get('/', function(req, res, next) {
   collection.find({},{},function(e,docs){
     console.log(docs);
     if (e)
-      res.json({error:1,message:"Internal error"});
+      res.json({error:-2,message:"Internal error"});
     else
       res.json({error:0,response:docs});
   });
@@ -81,6 +57,27 @@ router.get('/:id', function(req, res) {
     });
   else
     res.json({error:1,message:"Incorrect param"});
+});
+
+/**
+ * Login
+ */
+router.post('/login', function(req, res, next) {
+  var db = req.db;
+  var collection = db.get('usercollection');
+
+  var username = req.body.username;
+  var password = req.body.password;
+
+  collection.find({username:username,password:password},{},function(e,docs){
+    console.log(docs);
+    if (e)
+      res.json({error:-2,message:"Internal error"});
+    else if(docs.length>0)
+      res.json({error:0,response:docs});
+    else
+      res.json({error:1,message:"Incorrect login",response:docs});
+  });
 });
 
 /**
