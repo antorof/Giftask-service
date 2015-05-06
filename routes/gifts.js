@@ -2,7 +2,7 @@
  * Regalo: {
  *    id,
  *    titulo - title,
- *    imagen - image,
+ *    imagen - image, // URL
  *    precio - price,
  *    loTengo - iHaveIt,
  *    usuarioPropietario - owner,
@@ -27,11 +27,11 @@ router.get('/', function(req, res, next) {
 
   console.log(req.query);
 
-  var token = req.query.token;
+  var auth = req.get('Authorization');
+  // ToDo validate auth
+  var token = auth;
 
-  // ToDo Validate token
-
-  collection.find({owner:token},{},function(e,docs){
+  collection.find({/*owner:token*/},{},function(e,docs){
     console.log(docs);
     if (e)
       res.json({error:1,message:"Internal error"});
@@ -50,9 +50,10 @@ router.get('/:id', function(req, res) {
   console.log(req.query);
 
   var id = req.params.id;
-  var token = req.query.token;
 
-  // ToDo Validate token
+  var auth = req.get('Authorization');
+  // ToDo validate auth
+  var token = auth;
 
   if(id.length==24)
     collection.findById(id,{},function(e,docs){
@@ -80,7 +81,10 @@ router.post('/', function(req, res) {
   console.log(req.body);
   console.log(req.query);
 
-  var token = req.query.token==undefined? req.body.token : req.query.token;
+  var auth = req.get('Authorization');
+  // ToDo validate auth
+  var token = auth;
+
   var title = req.body.title;
   var image = req.body.image;
   var price = req.body.price;
@@ -93,7 +97,6 @@ router.post('/', function(req, res) {
   var originId = req.body.originId;
   var likes = undefined; // ToDo Se heredan los likes?
 
-  // ToDo Validate token
   // ToDo Validate params
 
   collection.insert(
@@ -134,7 +137,10 @@ router.put('/:id', function(req, res) {
   console.log(req.body);
   console.log(req.query);
 
-  var token = req.query.token==undefined? req.body.token : req.query.token;
+  var auth = req.get('Authorization');
+  // ToDo validate auth
+  var token = auth;
+
   var id = req.params.id;
   var title = req.body.title;
   var image = req.body.image;
@@ -148,7 +154,6 @@ router.put('/:id', function(req, res) {
   var originId = req.body.originId;
   var likes = req.body.likes;
 
-  // ToDo Validate token
   // ToDo Validate params
 
   if(id.length==24)
@@ -186,9 +191,10 @@ router.delete('/:id', function(req, res) {
   console.log(req.query);
 
   var id = req.params.id;
-  var token = req.query.token;
 
-  // ToDo Validate token
+  var auth = req.get('Authorization');
+  // ToDo validate auth
+  var token = auth;
   
   if(id.length==24)
     collection.findById(id,{},function(e,docs){
