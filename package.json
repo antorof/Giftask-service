@@ -2,12 +2,10 @@
   "name": "servercc",
   "version": "0.0.0",
   "private": true,
-
   "engines": {
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
-  
   "scripts": {
     "start": "node ./bin/www"
   },
@@ -17,10 +15,11 @@
     "debug": "~2.1.1",
     "express": "~4.12.2",
     "jade": "~1.9.2",
-    "morgan": "~1.5.1",
-    "serve-favicon": "~2.2.0",
     "mongodb": "*",
-    "monk": "*"
+    "monk": "*",
+    "morgan": "~1.5.1",
+    "multer": "^0.1.8",
+    "serve-favicon": "~2.2.0"
   },
   "main": "bin/www"
 }
