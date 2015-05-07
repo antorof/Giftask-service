@@ -42,7 +42,7 @@ router.get('/', function(req, res, next) {
  */
 router.get('/:id', function(req, res) {
   var db = req.db;
-  var collection = db.get('usercollection');
+  var usersC = db.get('usercollection');
   var id = req.params.id;
 
   var auth = req.get('Authorization');
@@ -51,9 +51,28 @@ router.get('/:id', function(req, res) {
   console.log("GET Body:");
   console.log(req.query);
   if(id.length==24)
-    collection.findById(id,{},function(e,docs){
-      console.log(docs);
-      res.json({error:0,response:docs});
+    usersC.findById(id,{},function(e,userFnd){
+      if(userFnd){
+        var ids = clone(userFnd.followers);
+        for (var i = 0, len = ids.length; i < len; i++) {
+          ids[i] = usersC.id(ids[i]);
+        }
+        if(ids.length>0) {
+          usersC.find({_id:{ $in : ids }},{fields:maskUser},function(e,flwrsFnd){
+            console.log(flwrsFnd);
+            for (var i = 0, len = flwrsFnd.length; i < len; i++) {
+              console.log(userFnd.followers);
+              var ix = userFnd.followers.indexOf(flwrsFnd[i]._id+"");
+              userFnd.followers[ix] = flwrsFnd[i];
+            }
+            res.json({error:0,response:userFnd});
+          });
+        } else {
+          res.json({error:0,response:userFnd});
+        }
+      } else {
+        res.json({error:0,response:userFnd});
+      }
     });
   else
     res.json({error:1,message:"Incorrect param"});
@@ -216,3 +235,25 @@ router.delete('/:id', function(req, res) {
 });
 
 module.exports = router;
+/**
+ * Clona el objeto pasado mediante serializacion
+ * @param a Objecto a clonar
+ */
+function clone(a) {
+  return JSON.parse(JSON.stringify(a));
+}
+
+var maskUser = {
+  //_id:0
+  //username: 0,
+  //name: 0,
+  //email:0,
+  password: 0,
+  isMale: 0,
+  town: 0,
+  birthday: 0,
+  image: 0,
+  gifts: 0,
+  followers: 0,
+  following: 0
+}
