@@ -48,24 +48,20 @@ router.get('/:id', function(req, res) {
   var auth = req.get('Authorization');
   // ToDo validate auth
 
-  console.log("GET Body:");
-  console.log(req.query);
   if(id.length==24)
     usersC.findById(id,{},function(e,userFnd){
       if(userFnd){
-        var ids = clone(userFnd.followers);
-        for (var i = 0, len = ids.length; i < len; i++) {
-          ids[i] = usersC.id(ids[i]);
-        }
-        if(ids.length>0) {
-          usersC.find({_id:{ $in : ids }},{fields:maskUser},function(e,flwrsFnd){
-            console.log(flwrsFnd);
-            for (var i = 0, len = flwrsFnd.length; i < len; i++) {
-              console.log(userFnd.followers);
-              var ix = userFnd.followers.indexOf(flwrsFnd[i]._id+"");
-              userFnd.followers[ix] = flwrsFnd[i];
+        var idsFwrs = toObjectID(userFnd.followers,usersC);
+        if(idsFwrs.length>0) {
+          matchUsuarios(usersC,userFnd.followers,idsFwrs,maskUser,function(e,result){
+            var idsFwng = toObjectID(userFnd.following,usersC);
+            if(idsFwng.length>0) {
+              matchUsuarios(usersC,userFnd.following,idsFwng,maskUser,function(e,result){
+                res.json({error:0,response:userFnd});
+              });
+            } else {
+              res.json({error:0,response:userFnd});
             }
-            res.json({error:0,response:userFnd});
           });
         } else {
           res.json({error:0,response:userFnd});
@@ -235,12 +231,54 @@ router.delete('/:id', function(req, res) {
 });
 
 module.exports = router;
+
+/* --------------------------------------------------------------- */
+/* --------------------FUNCIONES Y VARIABLES---------------------- */
+
+/**
+ * Busca la informacion de los usuarios cuyas IDs se proveen y las
+ * introduce en su lugar correspondiente (sustituye) en el array
+ * actual de IDs (current).
+ * @param collection Collection en la que se busca
+ * @param current Array actual, en el que se volcaran los datos utilizando matching
+ * @param ids Array con los IDs de los usuario que queremos buscar
+ * @param mask Mascara de seleccion de campos
+ * @param callback Callback llamado al terminar con los parametros 'e' y
+ *                 el resultado de la consulta
+ */
+function matchUsuarios(collection, current, ids, mask, callback) {
+  collection.find({_id:{ $in : ids }},{fields:mask},function(e,result){
+    for (var i = 0, len = result.length; i < len; i++) {
+      var ix = current.indexOf(result[i]._id+"");
+      current[ix] = result[i];
+    }
+    callback(e,result);
+  });
+}
+
+function toObjectID(obj, collection) {
+  var res = Array();
+  if(is('Array',obj)) {
+    for (var i = 0, len = obj.length; i < len; i++) {
+      res.push( collection.id(obj[i]) );
+    }
+  } else {
+    res = collection.id(obj);
+  }
+  return res;
+}
+
 /**
  * Clona el objeto pasado mediante serializacion
  * @param a Objecto a clonar
  */
 function clone(a) {
   return JSON.parse(JSON.stringify(a));
+}
+
+function is(type, obj) {
+  var clas = Object.prototype.toString.call(obj).slice(8, -1);
+  return obj !== undefined && obj !== null && clas === type;
 }
 
 var maskUser = {
