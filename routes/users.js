@@ -10,8 +10,8 @@
  *
  */
 /**
- * seguidores: [{id, nombre, username}]
- * siguiendo: [{id, nombre, username}]
+ * seguidores: [{id, nombre, username, image}]
+ * siguiendo: [{id, nombre, username, image}]
  * regalos: [{}]
  */
 var express = require('express');
@@ -49,14 +49,14 @@ router.get('/:id', function(req, res) {
   // ToDo validate auth
 
   if(id.length==24)
-    usersC.findById(id,{},function(e,userFnd){
+    usersC.findById(id,maskUser,function(e,userFnd){
       if(userFnd){
         var idsFwrs = toObjectID(userFnd.followers,usersC);
         if(idsFwrs.length>0) {
-          matchUsuarios(usersC,userFnd.followers,idsFwrs,maskUser,function(e,result){
+          matchUsuarios(usersC,userFnd.followers,idsFwrs,maskUserStub,function(e,result){
             var idsFwng = toObjectID(userFnd.following,usersC);
             if(idsFwng.length>0) {
-              matchUsuarios(usersC,userFnd.following,idsFwng,maskUser,function(e,result){
+              matchUsuarios(usersC,userFnd.following,idsFwng,maskUserStub,function(e,result){
                 res.json({error:0,response:userFnd});
               });
             } else {
@@ -281,8 +281,8 @@ function is(type, obj) {
   return obj !== undefined && obj !== null && clas === type;
 }
 
-var maskUser = {
-  //_id:0
+var maskUserStub = {
+  //_id:0,
   //username: 0,
   //name: 0,
   //email:0,
@@ -290,8 +290,23 @@ var maskUser = {
   isMale: 0,
   town: 0,
   birthday: 0,
-  image: 0,
+  //image: 0,
   gifts: 0,
   followers: 0,
   following: 0
-}
+};
+
+var maskUser = {
+  //_id:0,
+  //username: 0,
+  //name: 0,
+  //email:0,
+  //password: 0,
+  //isMale: 0,
+  //town: 0,
+  //birthday: 0,
+  //image: 0,
+  gifts: 0,
+  //followers: 0,
+  //following: 0
+};
