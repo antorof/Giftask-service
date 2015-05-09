@@ -209,6 +209,48 @@ router.put('/:id', function(req, res) {
 
 
 /**
+ * Actualiza la imagen del usuario identificado por el id
+ */
+router.put('/:id/image', function(req, res) {
+  var db = req.db;
+  var collection = db.get('usercollection');
+  var id = req.params.id;
+  var basePath = process.env.OPENSHIFT_DATA_DIR?process.env.OPENSHIFT_DATA_DIR:"./";
+  var upath = basePath+"uploads/uimages";
+  console.log(upath);
+
+  console.log(req.params);
+  console.log(req.body);
+  console.log(req.query);
+  console.log(req.files);
+
+  var auth = req.get('Authorization');
+  // ToDo validate auth
+
+  var image = req.body.image;
+
+  // ToDo Validate params
+
+  //if(id.length==24)
+  //  collection.update(
+  //      {"_id" : id},
+  //      {
+  //        image: image
+  //      },
+  //      function(e,docs){
+  //        console.log(docs);
+  //        res.json({error:0,response:docs});
+  //      });
+  //else
+    res.json({error:1,message:"Incorrect param",other:[
+      req.params,
+      req.body,
+      req.query,
+      req.files
+    ]});
+});
+
+/**
  * Elimina el usuario identificado por el <tt>id</tt>
  */
 router.delete('/:id', function(req, res) {
