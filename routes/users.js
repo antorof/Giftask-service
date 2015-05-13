@@ -83,13 +83,15 @@ router.post('/login', function(req, res, next) {
 
   var username = req.body.username;
   var password = req.body.password;
+  var email = req.body.email;
 
-  collection.find({username:username,password:password},{},function(e,docs){
+  //collection.findOne({username:username,password:password,email:email},{},function(e,docs){
+  collection.findOne({$or: [{username:username,password:password}, {email:email,password:password}]},{},function(e,docs){
     console.log(docs);
     if (e)
       res.json({error:-2,message:"Internal error"});
-    else if(docs.length>0)
-      res.json({error:0,response:docs});
+    //else if(docs.length>0)
+    //  res.json({error:0,response:docs});
     else
       res.json({error:1,message:"Incorrect login",response:docs});
   });
